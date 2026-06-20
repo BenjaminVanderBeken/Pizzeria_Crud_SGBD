@@ -1,0 +1,76 @@
+<header class="page-header">
+  <img class="banderole" src="assets/benderole-ingredient-poisson.webp" alt="" />
+  <span>Catalogue</span>
+  <h1>Supplements ({{ nombreSupplements() }})</h1>
+  <p>Gerez les supplements disponibles pour les produits de la pizzeria.</p>
+</header>
+
+<section class="toolbar">
+  <button type="button" (click)="ouvrirFormulaire()">Ajouter</button>
+  <button type="button" class="btn-secondaire" (click)="charger()" [disabled]="chargement()">
+    Actualiser
+  </button>
+</section>
+
+@if (afficherFormulaire()) {
+  <form [formGroup]="formulaire" (ngSubmit)="enregistrer()" class="formulaire">
+    <div class="champ">
+      <label for="nom">Nom *</label>
+      <input id="nom" formControlName="nom" type="text" placeholder="Ex: Mozzarella" />
+    </div>
+
+    <div class="champ">
+      <label for="type">Type *</label>
+      <input id="type" formControlName="type" type="text" placeholder="Ex: Fromage, Viande, Legume" />
+    </div>
+
+    <div class="champ">
+      <label for="prix">Prix (EUR) *</label>
+      <input id="prix" formControlName="prix" type="number" step="0.5" />
+    </div>
+
+    <div class="champ checkbox">
+      <label><input formControlName="actif" type="checkbox" /> Actif</label>
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="formulaire.invalid">Enregistrer</button>
+      <button type="button" class="btn-secondaire" (click)="fermerFormulaire()">Annuler</button>
+    </div>
+  </form>
+}
+
+@if (erreur()) {
+  <p class="notice error">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="notice">Chargement des supplements...</p>
+} @else if (supplements().length === 0) {
+  <p class="notice">Aucun supplement trouve.</p>
+} @else {
+  <section class="table" aria-label="Liste des supplements">
+    <div class="table-head">
+      <span>Nom</span>
+      <span>Type</span>
+      <span>Prix</span>
+      <span>Etat</span>
+      <span>Actions</span>
+    </div>
+
+    @for (supplement of supplements(); track supplement.id) {
+      <article class="table-row">
+        <strong>{{ supplement.nom }}</strong>
+        <span>{{ supplement.type }}</span>
+        <span>{{ supplement.prix.toFixed(2) }} EUR</span>
+        <span [class.inactive]="!supplement.actif">
+          {{ supplement.actif ? 'Actif' : 'Inactif' }}
+        </span>
+        <span class="row-actions">
+          <button type="button" class="btn-petit" (click)="ouvrirFormulaire(supplement)">Modifier</button>
+          <button type="button" class="btn-petit btn-danger" (click)="supprimer(supplement.id)">Supprimer</button>
+        </span>
+      </article>
+    }
+  </section>
+}

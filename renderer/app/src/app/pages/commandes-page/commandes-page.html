@@ -1,0 +1,95 @@
+<header class="page-header">
+  <img class="banderole" src="assets/banderole-ingredients-boissons.webp" alt="" />
+  <span>Ventes</span>
+  <h1>Commandes ({{ nombreCommandes() }})</h1>
+  <p>Consultez et creez les commandes de la pizzeria.</p>
+</header>
+
+<section class="toolbar">
+  <button type="button" (click)="ouvrirFormulaire()">Nouvelle commande</button>
+  <button type="button" class="btn-secondaire" (click)="charger()" [disabled]="chargement()">
+    Actualiser
+  </button>
+</section>
+
+@if (afficherFormulaire()) {
+  <form [formGroup]="formulaire" (ngSubmit)="enregistrer()" class="formulaire">
+    <div class="champ">
+      <label for="clientId">Client (optionnel)</label>
+      <select id="clientId" formControlName="clientId">
+        <option [ngValue]="null">Aucun client</option>
+        @for (client of clients(); track client.id) {
+          <option [ngValue]="client.id">{{ client.nom }} {{ client.prenom || '' }}</option>
+        }
+      </select>
+    </div>
+
+    <fieldset class="lignes-fieldset" formArrayName="lignes">
+      <legend>Lignes de commande</legend>
+
+      @for (ligne of lignes.controls; track $index) {
+        <div class="ligne-commande" [formGroupName]="$index">
+          <select formControlName="produitId">
+            <option [value]="0" disabled>Choisir un produit</option>
+            @for (produit of produits(); track produit.id) {
+              <option [value]="produit.id">{{ produit.nom }} — {{ produit.prixBase.toFixed(2) }} EUR</option>
+            }
+          </select>
+          <input formControlName="quantite" type="number" min="1" placeholder="Qte" />
+          <button type="button" class="btn-petit btn-danger" (click)="supprimerLigne($index)">X</button>
+        </div>
+      }
+
+      <button type="button" class="btn-secondaire" (click)="ajouterLigne()">+ Ajouter une ligne</button>
+    </fieldset>
+
+    <div class="champ">
+      <label for="notes">Notes</label>
+      <input id="notes" formControlName="notes" type="text" />
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="formulaire.invalid || lignes.length === 0">Creer la commande</button>
+      <button type="button" class="btn-secondaire" (click)="fermerFormulaire()">Annuler</button>
+    </div>
+  </form>
+}
+
+@if (erreur()) {
+  <p class="notice error">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="notice">Chargement des commandes...</p>
+} @else if (commandes().length === 0) {
+  <p class="notice">Aucune commande trouvee.</p>
+} @else {
+  <section class="table" aria-label="Liste des commandes">
+    <div class="table-head">
+      <span>Numero</span>
+      <span>Client</span>
+      <span>Total</span>
+      <span>Statut</span>
+      <span>Actions</span>
+    </div>
+
+    @for (commande of commandes(); track commande.id) {
+      <article class="table-row">
+        <strong>{{ commande.numeroCommande }}</strong>
+        <span>{{ commande.client ? commande.client.nom : 'Anonyme' }}</span>
+        <span>{{ commande.montantTotal.toFixed(2) }} EUR</span>
+        <span>
+          <select [value]="commande.statut" (change)="modifierStatut(commande, $any($event.target).value)">
+            <option value="EN_ATTENTE">En attente</option>
+            <option value="EN_PREPARATION">En preparation</option>
+            <option value="TERMINEE">Terminee</option>
+            <option value="ANNULEE">Annulee</option>
+          </select>
+        </span>
+        <span class="row-actions">
+          <button type="button" class="btn-petit btn-danger" (click)="supprimer(commande.id)">Supprimer</button>
+        </span>
+      </article>
+    }
+  </section>
+}

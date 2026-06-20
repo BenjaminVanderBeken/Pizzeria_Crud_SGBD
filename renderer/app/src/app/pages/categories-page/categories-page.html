@@ -1,0 +1,56 @@
+<header class="page-header">
+  <img class="banderole" src="assets/banderole-ingredients-romarin.webp" alt="" />
+  <span>Catalogue</span>
+  <h1>Categories ({{ nombreCategories() }})</h1>
+  <p>Gerez les categories de produits de la pizzeria.</p>
+</header>
+
+<section class="toolbar">
+  <button type="button" (click)="ouvrirFormulaire()">Ajouter</button>
+  <button type="button" class="btn-secondaire" (click)="chargerCategories()" [disabled]="chargement()">
+    Actualiser
+  </button>
+</section>
+
+@if (afficherFormulaire()) {
+  <app-categorie-formulaire
+    [categorie]="categorieEnEdition()"
+    (enregistrer)="enregistrer($event)"
+    (annuler)="fermerFormulaire()"
+  />
+}
+
+@if (erreur()) {
+  <p class="notice error">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="notice">Chargement des categories...</p>
+} @else if (categories().length === 0) {
+  <p class="notice">Aucune categorie trouvee.</p>
+} @else {
+  <section class="table" aria-label="Liste des categories">
+    <div class="table-head">
+      <span>Nom</span>
+      <span>Description</span>
+      <span>Ordre</span>
+      <span>Etat</span>
+      <span>Actions</span>
+    </div>
+
+    @for (categorie of categories(); track categorie.id) {
+      <article class="table-row">
+        <strong>{{ categorie.nom }}</strong>
+        <span>{{ categorie.description || 'Sans description' }}</span>
+        <span>{{ categorie.ordreAffichage }}</span>
+        <span [class.inactive]="!categorie.actif">
+          {{ categorie.actif ? 'Actif' : 'Inactif' }}
+        </span>
+        <span class="row-actions">
+          <button type="button" class="btn-petit" (click)="ouvrirFormulaire(categorie)">Modifier</button>
+          <button type="button" class="btn-petit btn-danger" (click)="supprimer(categorie.id)">Supprimer</button>
+        </span>
+      </article>
+    }
+  </section>
+}

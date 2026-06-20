@@ -1,0 +1,26 @@
+<main class="app-shell">
+  <aside class="sidebar" aria-label="Navigation principale">
+    <div class="brand">
+      <img class="brand-logo" src="assets/SikuloLogo.webp" alt="Logo Pizzeria" />
+      <div>
+        <strong>Gestion Pizzeria</strong>
+        <span>Sikulo</span>
+      </div>
+    </div>
+
+    <nav class="nav-list">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">
+        Vue d'ensemble
+      </a>
+      <a routerLink="/categories" routerLinkActive="active">Categories</a>
+      <a routerLink="/produits" routerLinkActive="active">Produits</a>
+      <a routerLink="/clients" routerLinkActive="active">Clients</a>
+      <a routerLink="/commandes" routerLinkActive="active">Commandes</a>
+      <a routerLink="/supplements" routerLinkActive="active">Supplements</a>
+    </nav>
+  </aside>
+
+  <section class="content">
+    <router-outlet />
+  </section>
+</main>

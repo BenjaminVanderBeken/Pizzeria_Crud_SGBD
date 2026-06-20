@@ -1,0 +1,28 @@
+<form [formGroup]="formulaire" (ngSubmit)="soumettre()" class="formulaire">
+  <div class="champ">
+    <label for="nom">Nom *</label>
+    <input id="nom" formControlName="nom" type="text" placeholder="Ex: Pizzas classiques" />
+  </div>
+
+  <div class="champ">
+    <label for="description">Description</label>
+    <input id="description" formControlName="description" type="text" placeholder="Description optionnelle" />
+  </div>
+
+  <div class="champ">
+    <label for="ordreAffichage">Ordre d'affichage</label>
+    <input id="ordreAffichage" formControlName="ordreAffichage" type="number" />
+  </div>
+
+  <div class="champ checkbox">
+    <label>
+      <input formControlName="actif" type="checkbox" />
+      Actif
+    </label>
+  </div>
+
+  <div class="actions">
+    <button type="submit" [disabled]="formulaire.invalid">Enregistrer</button>
+    <button type="button" class="btn-secondaire" (click)="annuler.emit()">Annuler</button>
+  </div>
+</form>

@@ -1,0 +1,37 @@
+<header class="page-header">
+  <img class="banderole" src="assets/banderole-ingredients.webp" alt="" />
+  <span>Tableau de bord</span>
+  <h1>Vue d'ensemble</h1>
+  <p>Statistiques globales de la pizzeria — {{ totalEntites() }} enregistrements au total.</p>
+</header>
+
+@if (chargement()) {
+  <p class="notice">Chargement des statistiques...</p>
+} @else if (compteurs(); as c) {
+  <section class="stats" aria-label="Compteurs">
+    <article class="stat-card">
+      <span class="stat-valeur">{{ c.categories }}</span>
+      <span class="stat-label">Categories</span>
+    </article>
+    <article class="stat-card">
+      <span class="stat-valeur">{{ c.produits }}</span>
+      <span class="stat-label">Produits</span>
+    </article>
+    <article class="stat-card">
+      <span class="stat-valeur">{{ c.clients }}</span>
+      <span class="stat-label">Clients</span>
+    </article>
+    <article class="stat-card">
+      <span class="stat-valeur">{{ c.commandes }}</span>
+      <span class="stat-label">Commandes</span>
+    </article>
+    <article class="stat-card">
+      <span class="stat-valeur">{{ c.supplements }}</span>
+      <span class="stat-label">Supplements</span>
+    </article>
+    <article class="stat-card accent">
+      <span class="stat-valeur">{{ chiffreAffaires().toFixed(2) }} EUR</span>
+      <span class="stat-label">Chiffre d'affaires</span>
+    </article>
+  </section>
+}

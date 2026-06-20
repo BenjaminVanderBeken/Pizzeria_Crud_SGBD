@@ -1,0 +1,63 @@
+.formulaire {
+  display: grid;
+  gap: 14px;
+  border: 1px solid #ded8ce;
+  border-radius: 8px;
+  background: #fffdf8;
+  padding: 18px;
+  margin-bottom: 18px;
+}
+
+.champ {
+  display: grid;
+  gap: 4px;
+}
+
+.champ label {
+  font-weight: 650;
+  font-size: 0.85rem;
+}
+
+.champ input[type="text"],
+.champ input[type="number"],
+.champ select {
+  border: 1px solid #ded8ce;
+  border-radius: 6px;
+  padding: 8px 10px;
+  font-size: 0.92rem;
+}
+
+.champ.checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+button {
+  border: 1px solid #9a2b24;
+  border-radius: 8px;
+  background: #b9352b;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 750;
+  min-height: 38px;
+  padding: 0 14px;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.btn-secondaire {
+  border-color: #ded8ce;
+  background: #fff;
+  color: #34302a;
+}

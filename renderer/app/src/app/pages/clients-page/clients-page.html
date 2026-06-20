@@ -1,0 +1,80 @@
+<header class="page-header">
+  <img class="banderole" src="assets/banderole-ingredients-cannelos.webp" alt="" />
+  <span>Gestion</span>
+  <h1>Clients ({{ nombreClients() }})</h1>
+  <p>Gerez les clients de la pizzeria et leurs informations de contact.</p>
+</header>
+
+<section class="toolbar">
+  <button type="button" (click)="ouvrirFormulaire()">Ajouter</button>
+  <button type="button" class="btn-secondaire" (click)="charger()" [disabled]="chargement()">
+    Actualiser
+  </button>
+</section>
+
+@if (afficherFormulaire()) {
+  <form [formGroup]="formulaire" (ngSubmit)="enregistrer()" class="formulaire">
+    <div class="champ">
+      <label for="nom">Nom *</label>
+      <input id="nom" formControlName="nom" type="text" placeholder="Nom de famille" />
+    </div>
+
+    <div class="champ">
+      <label for="prenom">Prenom</label>
+      <input id="prenom" formControlName="prenom" type="text" />
+    </div>
+
+    <div class="champ">
+      <label for="email">Email</label>
+      <input id="email" formControlName="email" type="text" placeholder="email@exemple.com" />
+    </div>
+
+    <div class="champ">
+      <label for="telephone">Telephone</label>
+      <input id="telephone" formControlName="telephone" type="text" />
+    </div>
+
+    <div class="champ">
+      <label for="notes">Notes</label>
+      <input id="notes" formControlName="notes" type="text" />
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="formulaire.invalid">Enregistrer</button>
+      <button type="button" class="btn-secondaire" (click)="fermerFormulaire()">Annuler</button>
+    </div>
+  </form>
+}
+
+@if (erreur()) {
+  <p class="notice error">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="notice">Chargement des clients...</p>
+} @else if (clients().length === 0) {
+  <p class="notice">Aucun client trouve.</p>
+} @else {
+  <section class="table" aria-label="Liste des clients">
+    <div class="table-head">
+      <span>Nom</span>
+      <span>Prenom</span>
+      <span>Email</span>
+      <span>Telephone</span>
+      <span>Actions</span>
+    </div>
+
+    @for (client of clients(); track client.id) {
+      <article class="table-row">
+        <strong>{{ client.nom }}</strong>
+        <span>{{ client.prenom || '—' }}</span>
+        <span>{{ client.email || '—' }}</span>
+        <span>{{ client.telephone || '—' }}</span>
+        <span class="row-actions">
+          <button type="button" class="btn-petit" (click)="ouvrirFormulaire(client)">Modifier</button>
+          <button type="button" class="btn-petit btn-danger" (click)="supprimer(client.id)">Supprimer</button>
+        </span>
+      </article>
+    }
+  </section>
+}

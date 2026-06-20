@@ -1,0 +1,141 @@
+.page-header {
+  display: grid;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.page-header span {
+  color: #9a2b24;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.page-header h1 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.page-header p {
+  max-width: 780px;
+  margin: 0;
+  color: #645d53;
+}
+
+.banderole {
+  width: 100%;
+  height: 140px;
+  display: block;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 8px;
+  margin-bottom: 8px;
+}
+
+.toolbar {
+  display: flex;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-bottom: 14px;
+}
+
+button {
+  border: 1px solid #9a2b24;
+  border-radius: 8px;
+  background: #b9352b;
+  color: #fff;
+  cursor: pointer;
+  font-weight: 750;
+  min-height: 38px;
+  padding: 0 14px;
+}
+
+button:disabled {
+  cursor: default;
+  opacity: 0.55;
+}
+
+.btn-secondaire {
+  border-color: #ded8ce;
+  background: #fff;
+  color: #34302a;
+}
+
+.btn-petit {
+  min-height: 30px;
+  font-size: 0.82rem;
+  padding: 0 10px;
+}
+
+.btn-danger {
+  border-color: #c0392b;
+  background: #e74c3c;
+}
+
+.notice {
+  border: 1px solid #ded8ce;
+  border-radius: 8px;
+  background: #fffdf8;
+  color: #645d53;
+  margin: 0 0 14px;
+  padding: 14px;
+}
+
+.notice.error {
+  border-color: #d7a09a;
+  background: #fff4f2;
+  color: #8f241f;
+}
+
+.table {
+  overflow: hidden;
+  border: 1px solid #ded8ce;
+  border-radius: 8px;
+  background: #fffdf8;
+}
+
+.table-head,
+.table-row {
+  display: grid;
+  grid-template-columns: 1.1fr 2fr 90px 80px 160px;
+  gap: 12px;
+  align-items: center;
+  padding: 13px 16px;
+}
+
+.table-head {
+  border-bottom: 1px solid #ded8ce;
+  background: #f0dfc7;
+  color: #5b352e;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.table-row + .table-row {
+  border-top: 1px solid #eee6d8;
+}
+
+.table-row span {
+  color: #645d53;
+}
+
+.table-row .inactive {
+  color: #9a2b24;
+  font-weight: 750;
+}
+
+.row-actions {
+  display: flex;
+  gap: 6px;
+}
+
+@media (max-width: 720px) {
+  .table-head {
+    display: none;
+  }
+
+  .table-row {
+    grid-template-columns: 1fr;
+  }
+}

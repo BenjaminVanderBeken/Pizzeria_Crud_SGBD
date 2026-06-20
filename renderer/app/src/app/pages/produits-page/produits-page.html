@@ -1,0 +1,88 @@
+<header class="page-header">
+  <img class="banderole" src="assets/banderole-ingredients-sardines.webp" alt="" />
+  <span>Catalogue</span>
+  <h1>Produits ({{ nombreProduits() }})</h1>
+  <p>Gerez les produits proposes par la pizzeria.</p>
+</header>
+
+<section class="toolbar">
+  <button type="button" (click)="ouvrirFormulaire()">Ajouter</button>
+  <button type="button" class="btn-secondaire" (click)="charger()" [disabled]="chargement()">
+    Actualiser
+  </button>
+</section>
+
+@if (afficherFormulaire()) {
+  <form [formGroup]="formulaire" (ngSubmit)="enregistrer()" class="formulaire">
+    <div class="champ">
+      <label for="nom">Nom *</label>
+      <input id="nom" formControlName="nom" type="text" placeholder="Ex: Margherita" />
+    </div>
+
+    <div class="champ">
+      <label for="categorieId">Categorie *</label>
+      <select id="categorieId" formControlName="categorieId">
+        <option [value]="0" disabled>Choisir une categorie</option>
+        @for (cat of categories(); track cat.id) {
+          <option [value]="cat.id">{{ cat.nom }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="champ">
+      <label for="prixBase">Prix (EUR) *</label>
+      <input id="prixBase" formControlName="prixBase" type="number" step="0.5" />
+    </div>
+
+    <div class="champ">
+      <label for="description">Description</label>
+      <input id="description" formControlName="description" type="text" />
+    </div>
+
+    <div class="champ checkbox">
+      <label><input formControlName="actif" type="checkbox" /> Actif</label>
+      <label><input formControlName="populaire" type="checkbox" /> Populaire</label>
+      <label><input formControlName="permetSupplement" type="checkbox" /> Permet supplements</label>
+    </div>
+
+    <div class="actions">
+      <button type="submit" [disabled]="formulaire.invalid">Enregistrer</button>
+      <button type="button" class="btn-secondaire" (click)="fermerFormulaire()">Annuler</button>
+    </div>
+  </form>
+}
+
+@if (erreur()) {
+  <p class="notice error">{{ erreur() }}</p>
+}
+
+@if (chargement()) {
+  <p class="notice">Chargement des produits...</p>
+} @else if (produits().length === 0) {
+  <p class="notice">Aucun produit trouve.</p>
+} @else {
+  <section class="table" aria-label="Liste des produits">
+    <div class="table-head">
+      <span>Nom</span>
+      <span>Categorie</span>
+      <span>Prix</span>
+      <span>Etat</span>
+      <span>Actions</span>
+    </div>
+
+    @for (produit of produits(); track produit.id) {
+      <article class="table-row">
+        <strong>{{ produit.nom }}</strong>
+        <span>{{ produit.categorie?.nom ?? '—' }}</span>
+        <span>{{ produit.prixBase.toFixed(2) }} EUR</span>
+        <span [class.inactive]="!produit.actif">
+          {{ produit.actif ? 'Actif' : 'Inactif' }}
+        </span>
+        <span class="row-actions">
+          <button type="button" class="btn-petit" (click)="ouvrirFormulaire(produit)">Modifier</button>
+          <button type="button" class="btn-petit btn-danger" (click)="supprimer(produit.id)">Supprimer</button>
+        </span>
+      </article>
+    }
+  </section>
+}

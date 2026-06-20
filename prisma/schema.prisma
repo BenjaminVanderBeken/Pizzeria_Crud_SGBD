@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-ts"
+  output   = "../src/prisma/generated"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+enum StatutCommande {
+  EN_ATTENTE
+  EN_PREPARATION
+  TERMINEE
+  ANNULEE
+}
+
+enum ModePaiement {
+  ESPECES
+  CARTE
+  EN_ATTENTE
+}
+
+enum RoleUtilisateur {
+  ADMIN
+  CAISSIER
+}
+
+model Categorie {
+  id                Int       @id @default(autoincrement())
+  nom               String
+  description       String?
+  ordreAffichage    Int       @default(0)
+  actif             Boolean   @default(true)
+  dateCreation      DateTime  @default(now())
+  dateModification  DateTime  @updatedAt
+
+  produits          Produit[]
+}
+
+model Produit {
+  id                 Int       @id @default(autoincrement())
+  categorieId        Int
+  nom                String
+  description        String?
+  prixBase           Float
+  imageUrl           String?
+  actif              Boolean   @default(true)
+  populaire          Boolean   @default(false)
+  permetSupplement   Boolean   @default(false)
+  dateCreation       DateTime  @default(now())
+  dateModification   DateTime  @updatedAt
+
+  categorie          Categorie @relation(fields: [categorieId], references: [id], onDelete: Restrict)
+  detailsCommandes   DetailCommande[]
+}
+
+model Client {
+  id                Int       @id @default(autoincrement())
+  nom               String
+  prenom            String?
+  email             String?   @unique
+  telephone         String?
+  notes             String?
+  actif             Boolean   @default(true)
+  dateCreation      DateTime  @default(now())
+  dateModification  DateTime  @updatedAt
+
+  commandes         Commande[]
+}
+
+model Commande {
+  id                 Int             @id @default(autoincrement())
+  numeroCommande     String          @unique
+  clientId           Int?
+  dateCommande       DateTime        @default(now())
+  statut             StatutCommande  @default(EN_ATTENTE)
+  modePaiement       ModePaiement    @default(EN_ATTENTE)
+  sousTotal          Float
+  tvaMontant         Float           @default(0)
+  reductionMontant   Float           @default(0)
+  montantTotal       Float
+  notes              String?
+
+  client             Client?         @relation(fields: [clientId], references: [id], onDelete: SetNull)
+  details            DetailCommande[]
+}
+
+model DetailCommande {
+  id              Int       @id @default(autoincrement())
+  commandeId      Int
+  produitId       Int
+  quantite        Int
+  prixUnitaire    Float
+  prixTotal       Float
+  notes           String?
+
+  commande        Commande  @relation(fields: [commandeId], references: [id], onDelete: Cascade)
+  produit         Produit   @relation(fields: [produitId], references: [id], onDelete: Restrict)
+  supplements     DetailSupplement[]
+}
+
+model Supplement {
+  id            Int       @id @default(autoincrement())
+  nom           String
+  type          String
+  prix          Float
+  actif         Boolean   @default(true)
+  dateCreation  DateTime  @default(now())
+
+  details       DetailSupplement[]
+}
+
+model DetailSupplement {
+  detailCommandeId Int
+  supplementId     Int
+  quantite         Int    @default(1)
+  prix             Float
+
+  detailCommande   DetailCommande @relation(fields: [detailCommandeId], references: [id], onDelete: Cascade)
+  supplement       Supplement     @relation(fields: [supplementId], references: [id], onDelete: Restrict)
+
+  @@id([detailCommandeId, supplementId])
+}
+
+model Utilisateur {
+  id            Int             @id @default(autoincrement())
+  nom           String
+  prenom        String?
+  email         String          @unique
+  passwordHash  String
+  role          RoleUtilisateur @default(CAISSIER)
+  actif         Boolean         @default(true)
+  dateCreation  DateTime        @default(now())
+}

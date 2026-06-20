@@ -1,0 +1,53 @@
+{
+  "name": "pizzeria_crud_5",
+  "productName": "pizzeria_crud_5",
+  "version": "1.0.0",
+  "description": "My Electron application description",
+  "main": ".vite/build/main.js",
+  "private": true,
+  "scripts": {
+    "start": "electron-forge start",
+    "build:angular": "cd renderer/app && ng build",
+    "package": "electron-forge package",
+    "make": "electron-forge make",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev --name init_pizzeria",
+    "prisma:studio": "npx prisma studio",
+    "seed": "tsx prisma/seed.ts"
+  },
+  "keywords": [],
+  "author": {
+    "name": "BenjaminVanderBeken",
+    "email": "benjamin.vander.beken@hotmail.com"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "@electron-forge/cli": "^7.11.2",
+    "@electron-forge/maker-deb": "^7.11.2",
+    "@electron-forge/maker-rpm": "^7.11.2",
+    "@electron-forge/maker-squirrel": "^7.11.2",
+    "@electron-forge/maker-zip": "^7.11.2",
+    "@electron-forge/plugin-auto-unpack-natives": "^7.11.2",
+    "@electron-forge/plugin-fuses": "^7.11.2",
+    "@electron-forge/plugin-vite": "^7.11.2",
+    "@electron/fuses": "^1.8.0",
+    "@types/better-sqlite3": "^7.6.13",
+    "@types/electron-squirrel-startup": "^1.0.2",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
+    "electron": "^38.8.6",
+    "eslint": "^8.57.1",
+    "eslint-plugin-import": "^2.32.0",
+    "prisma": "^7.8.0",
+    "tsx": "^4.22.3",
+    "typescript": "^6.0.3",
+    "vite": "^5.4.21"
+  },
+  "dependencies": {
+    "@prisma/adapter-better-sqlite3": "^7.8.0",
+    "@prisma/client": "^7.8.0",
+    "better-sqlite3": "^12.10.0",
+    "dotenv": "^17.4.2",
+    "electron-squirrel-startup": "^1.0.1"
+  }
+}
